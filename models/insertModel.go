@@ -1,6 +1,7 @@
 package models
 
 import (
+	"Demo/models"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -83,9 +84,16 @@ func AddUser(user *UserInfo) error{
 	o.Using("default")
 	//fmt.Println("enter AddUser,going to enter Insert()")
 	// 易错点：这里的user前面不需要加"&"
-	_,error := o.Insert(user)
-	fmt.Println("Insert() done!")
-	return error
+	//_,error := o.Insert(user)
+	//fmt.Println("Insert() done!")
+
+	var userInfo models.UserInfo
+	qs :=o.QueryTable("user_info")
+	err =qs.Filter("id",1).Filter("name","dengbin").One(&userInfo)
+	if err != nil{
+		beego.Error("query user_info failed")
+	}
+	return err
 }
 
 func (u *UserInfo) TableName() string{
